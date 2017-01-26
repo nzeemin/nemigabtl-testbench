@@ -1,0 +1,10 @@
+/trace.log
+/*.ncb
+/*.suo
+/*.user
+/*.rom
+/Debug
+/Release
+/emubase
+/temp
+/video/*
