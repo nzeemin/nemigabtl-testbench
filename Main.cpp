@@ -164,6 +164,61 @@ void Test3_Tests_303()
     Test_Done();
 }
 
+void Test4_Basic_303()
+{
+    Test_Init(_T("TEST 4: BASIC, ROM 3.03"), EMU_CONF_NEMIGA303);
+
+    Test_CopyFile(_T("data\\m5.dsk"), _T("temp\\m5.dsk"));
+    Test_AttachFloppyImage(0, _T("temp\\m5.dsk"));
+    Test_CopyFile(_T("data\\basic.dsk"), _T("temp\\basic.dsk"));
+    Test_AttachFloppyImage(1, _T("temp\\basic.dsk"));
+
+    Emulator_Run(35);  // Boot: 1.4 seconds
+    Emulator_KeyboardPressRelease('D');  // Boot from disk
+    Emulator_Run(25 * 20);
+    Emulator_KeyboardPressRelease('\r');  // Enter on date prompt
+    Emulator_Run(25 * 20);
+
+    Emulator_KeyboardSequence("RU MD1:BASVN\r");
+    Emulator_Run(25 * 11);
+    Test_CheckScreenshot(_T("data\\test04_303_01.bmp"));
+
+    // BASIC speed test by Sergey Frolov, see http://www.leningrad.su/calc/speed.php
+    Emulator_KeyboardSequence("4 FOR I = 1 TO 10\r");
+    Emulator_KeyboardSequence("5 A = 1.0000001\r");
+    Emulator_KeyboardSequence("10 B = A\r");
+    Emulator_KeyboardSequence("15 FOR J = 1 TO 27\r");
+    Emulator_KeyboardSequence("20 A = A * A\r");
+    Emulator_KeyboardSequence("25 B = B ^ 2.01\r");
+    Emulator_KeyboardSequence("30 NEXT J\r");
+    Emulator_KeyboardSequence("35 NEXT I\r");
+    Emulator_KeyboardSequence("40 PRINT A, B\r");
+    Emulator_Run(25 * 2);
+    Emulator_KeyboardSequence("RUN\r");
+    Emulator_Run(25 * 3);  //NOTE: Тест выполняется слишком быстро, на реале это заняло 8 секунд (на Немиге 4.06)
+    Test_CheckScreenshot(_T("data\\test04_303_02.bmp"));
+    // Результаты теста совпадают с реалом: http://zx-pk.ru/threads/20590-emulyator-nemiga.html?p=892828&viewfull=1#post892828
+
+    //Emulator_KeyboardSequence("PRINT PI\r");
+    //Emulator_Run(25 * 2);
+    //Emulator_KeyboardSequence("10 FOR I=32 TO 255\r");
+    //Emulator_KeyboardSequence("20 PRINT CHR$(I);\r");
+    //Emulator_KeyboardSequence("30 IF I MOD 16 = 15 THEN PRINT\r");
+    //Emulator_KeyboardSequence("50 NEXT I\r");
+    //Emulator_Run(25 * 2);
+    //Emulator_KeyboardSequence("LIST\r");
+    //NOTE: В листинге строка 30 выглядит как 330 -- WTF??
+    //Emulator_Run(25 * 2);
+    //g_pBoard->SetTrace(TRACE_KEYBOARD);
+    //Emulator_KeyboardSequence("RUN\r");
+    //NOTE: После запуска программа завершается и снова печатается "run", и так по кругу
+
+    //Test_SaveScreenshotSeria(_T("video\\test04_%04u.bmp"), 15, 25);
+    //Emulator_SaveImage(_T("test04.nmst"));
+
+    Test_Done();
+}
+
 void Test5_Games_303()
 {
     Test_Init(_T("TEST 5: Games, ROM 3.03"), EMU_CONF_NEMIGA303);
@@ -273,6 +328,7 @@ int _tmain(int /*argc*/, _TCHAR* /*argv*/[])
     Test1_SystemMonitor_406();
     Test2_DiskM5_303();
     Test3_Tests_303();
+    Test4_Basic_303();
     Test5_Games_303();
 
     Test_LogInfo(_T("Finalization..."));
