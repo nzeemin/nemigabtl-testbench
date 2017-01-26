@@ -164,6 +164,61 @@ void Test3_Tests_303()
     Test_Done();
 }
 
+void Test5_Games_303()
+{
+    Test_Init(_T("TEST 5: Games, ROM 3.03"), EMU_CONF_NEMIGA303);
+
+    Test_CopyFile(_T("data\\m5.dsk"), _T("temp\\m5.dsk"));
+    Test_AttachFloppyImage(0, _T("temp\\m5.dsk"));
+    Test_CopyFile(_T("data\\games.dsk"), _T("temp\\games.dsk"));
+    Test_AttachFloppyImage(1, _T("temp\\games.dsk"));
+
+    Emulator_Run(35);  // Boot: 1.4 seconds
+    Emulator_KeyboardPressRelease('D');  // Boot from disk
+    Emulator_Run(25 * 20);
+    Emulator_KeyboardPressRelease('\r');  // Enter on date prompt
+    Emulator_Run(25 * 20);
+
+    Emulator_KeyboardSequence("DIR/BR/C:3 MD1:\r");
+    Emulator_Run(25 * 5);
+    Test_CheckScreenshot(_T("data\\test05_303_dir.bmp"));
+
+    // KLAD2
+
+    Emulator_KeyboardSequence("RU MD1:KLAD2\r");
+    Emulator_Run(25 * 7);
+    Emulator_KeyboardPressRelease('\r');  // "плс?"
+    Emulator_Run(25 * 4);
+    Test_CheckScreenshot(_T("data\\test05_303_klad2_1.bmp"));
+    Emulator_KeyboardPressRelease('\r');
+    Emulator_Run(50);
+    Emulator_KeyboardPressRelease('1');  // Speed selection
+    Emulator_Run(25 * 4);
+    Test_CheckScreenshot(_T("data\\test05_303_klad2_2.bmp"));
+
+    Emulator_Reset();
+    Emulator_Run(35);  // Boot: 1.4 seconds
+    Emulator_KeyboardPressRelease('D');  // Boot from disk
+    Emulator_Run(25 * 20);
+    Emulator_KeyboardPressRelease('\r');  // Enter on date prompt
+    Emulator_Run(25 * 20);
+
+    // HORROR
+
+    Emulator_KeyboardSequence("RU MD1:HORROR\r");
+    Emulator_Run(25 * 7);
+    Emulator_KeyboardPressRelease('\r');  // "плс?"
+    Emulator_Run(25 * 4);
+    Test_CheckScreenshot(_T("data\\test05_303_horror_1.bmp"));
+    Emulator_KeyboardPressRelease('\r');  // Select "Game"
+    Emulator_Run(50);
+    Test_CheckScreenshot(_T("data\\test05_303_horror_2.bmp"));
+
+    //Test_SaveScreenshotSeria(_T("video\\test05_%04u.bmp"), 15, 25);
+
+    Test_Done();
+}
+
 int _tmain(int /*argc*/, _TCHAR* /*argv*/[])
 {
     SYSTEMTIME timeFrom;  ::GetLocalTime(&timeFrom);
@@ -174,6 +229,7 @@ int _tmain(int /*argc*/, _TCHAR* /*argv*/[])
     Test1_SystemMonitor_406();
     Test2_DiskM5_303();
     Test3_Tests_303();
+    Test5_Games_303();
 
     Test_LogInfo(_T("Finalization..."));
 
