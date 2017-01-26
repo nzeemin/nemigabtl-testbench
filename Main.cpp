@@ -196,6 +196,7 @@ void Test5_Games_303()
     Emulator_Run(25 * 4);
     Test_CheckScreenshot(_T("data\\test05_303_klad2_2.bmp"));
 
+    // Reboot
     Emulator_Reset();
     Emulator_Run(35);  // Boot: 1.4 seconds
     Emulator_KeyboardPressRelease('D');  // Boot from disk
@@ -214,7 +215,50 @@ void Test5_Games_303()
     Emulator_Run(50);
     Test_CheckScreenshot(_T("data\\test05_303_horror_2.bmp"));
 
-    //Test_SaveScreenshotSeria(_T("video\\test05_%04u.bmp"), 15, 25);
+    // Reboot
+    Emulator_Reset();
+    Emulator_Run(35);  // Boot: 1.4 seconds
+    Emulator_KeyboardPressRelease('D');  // Boot from disk
+    Emulator_Run(25 * 20);
+    Emulator_KeyboardPressRelease('\r');  // Enter on date prompt
+    Emulator_Run(25 * 20);
+
+    // DIG
+
+    Emulator_KeyboardSequence("RU MD1:DIG\r");
+    Emulator_Run(25 * 7);
+    Emulator_KeyboardPressRelease('\r');  // "РМУ?"
+    Emulator_Run(25 * 4);
+    Test_CheckScreenshot(_T("data\\test05_303_dig_1.bmp"));
+    Emulator_KeyboardPressRelease(' ');
+    Emulator_KeyboardSequence("WADS");  // Key mappings
+    Emulator_Run(50);
+    Emulator_KeyboardPressRelease('1');  // Rang
+    Emulator_Run(25 * 4);
+    Test_CheckScreenshot(_T("data\\test05_303_dig_2.bmp"));
+    //NOTE: Игра не заработала, выводит только часть спрайтов и всё
+
+    // Reboot
+    Emulator_Reset();
+    Emulator_Run(35);  // Boot: 1.4 seconds
+    Emulator_KeyboardPressRelease('D');  // Boot from disk
+    Emulator_Run(25 * 20);
+    Emulator_KeyboardPressRelease('\r');  // Enter on date prompt
+    Emulator_Run(25 * 20);
+
+    //// HORACE
+
+    Emulator_KeyboardSequence("RU MD1:HORACE\r");
+    Emulator_Run(25 * 7);
+    Emulator_KeyboardPressRelease('\r');  // "РМУ?"
+    Emulator_Run(25 * 4);
+    //NOTE: Тут выводится надпись со спецэффектом "HORACE ADAPTED FROM BK-0010 DCS&H"
+    //Test_SaveScreenshot(_T("test05_303_horace_1.bmp"));
+    Emulator_KeyboardPressRelease(' ');
+    Emulator_Run(25 * 8);
+    Test_CheckScreenshot(_T("data\\test05_303_horace_2.bmp"));
+
+    //Test_SaveScreenshotSeria(_T("video\\test05_%04u.bmp"), 20, 5);
 
     Test_Done();
 }
