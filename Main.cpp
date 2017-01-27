@@ -168,16 +168,15 @@ void Test3_Tests_303()
     Emulator_Run(25 * 5);
     Test_CheckScreenshot(_T("data\\test03_303_dir.bmp"));
 
-    // IOSCAN
+    // IOSCAN -- see http://zx-pk.ru/threads/20590-emulyator-nemiga.html?p=891570&viewfull=1#post891570
     Emulator_KeyboardSequence("RU MD1:IOSCAN\r");
     Emulator_Run(25 * 5);
     Test_CheckScreenshot(_T("data\\test03_303_ioscan.bmp"));
-    //NOTE: На реальной машине IOSCAN показывает другие диапазоны: http://zx-pk.ru/threads/20590-emulyator-nemiga.html?p=891570&viewfull=1#post891570
     Emulator_Run(25 * 2);
 
     // TSTVM2
     Emulator_KeyboardSequence("RU MD1:TSTVM2\r");
-    Emulator_Run(25 * 22);
+    Emulator_Run(25 * 24);
     Test_CheckScreenshot(_T("data\\test03_303_tstvm2_1.bmp"));
     Emulator_KeyboardPressRelease('\r');
     Emulator_Run(25 * 295);
@@ -352,6 +351,7 @@ int _tmain(int /*argc*/, _TCHAR* /*argv*/[])
 {
     SYSTEMTIME timeFrom;  ::GetLocalTime(&timeFrom);
     Test_LogInfo(_T("Initialization..."));
+    DebugLogClear();
 
     Test1_SystemMonitor_303();
     Test1_SystemMonitor_405();
