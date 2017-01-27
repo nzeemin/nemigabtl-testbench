@@ -174,9 +174,19 @@ void Test3_Tests_303()
     Test_CheckScreenshot(_T("data\\test03_303_ioscan.bmp"));
     Emulator_Run(25 * 2);
 
+    // SPEED
+    Emulator_KeyboardSequence("RU MD1:SPEED\r");
+    Emulator_Run(25 * 6);
+    g_pBoard->SetTimer50OnOff(true);
+    Emulator_Run(25 * 23);
+    g_pBoard->SetTimer50OnOff(false);
+    Emulator_Run(25 * 4);
+    Test_CheckScreenshot(_T("data\\test03_303_speed.bmp"));
+    Emulator_Run(25 * 2);
+
     // TSTVM2
     Emulator_KeyboardSequence("RU MD1:TSTVM2\r");
-    Emulator_Run(25 * 24);
+    Emulator_Run(25 * 28);
     Test_CheckScreenshot(_T("data\\test03_303_tstvm2_1.bmp"));
     Emulator_KeyboardPressRelease('\r');
     Emulator_Run(25 * 295);
