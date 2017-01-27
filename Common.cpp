@@ -380,5 +380,21 @@ void Test_CopyFile(LPCTSTR sFileNameFrom, LPCTSTR sFileNameTo)
     Test_LogFormat('i', _T("Copyed file %s to %s"), sFileNameFrom, sFileNameTo);
 }
 
+void Test_CreateDiskImage(LPCTSTR sFileName)
+{
+    LONG fileSize = 235392; // = 80 * 23 * 128 - 128
+    HANDLE hFile = ::CreateFile(sFileName,
+		GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+	if (hFile == INVALID_HANDLE_VALUE)
+    {
+        Test_LogFormat('E', _T("FAILED to create disk image %s"), sFileName);
+        return;
+    }
+
+    // Zero-fill the file
+    ::SetFilePointer(hFile, fileSize, NULL, FILE_BEGIN);
+    ::SetEndOfFile(hFile);
+    ::CloseHandle(hFile);
+}
 
 //////////////////////////////////////////////////////////////////////

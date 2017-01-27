@@ -101,6 +101,7 @@ void Test2_DiskM5_303()
     Test_CopyFile(_T("data\\m5.dsk"), _T("temp\\m5.dsk"));
     Test_AttachFloppyImage(0, _T("temp\\m5.dsk"));
 
+    // Boot to RT-11
     Emulator_Run(35);  // Boot: 1.4 seconds
     Emulator_KeyboardPressRelease('D');  // Boot from disk
     Emulator_Run(25 * 20);
@@ -108,21 +109,41 @@ void Test2_DiskM5_303()
     Emulator_Run(25 * 20);
     Test_CheckScreenshot(_T("data\\test02_303_01.bmp"));
 
+    // DIR
     Emulator_KeyboardSequence("DIR/BR/C:3\r");
     Emulator_Run(25 * 5);
     Test_CheckScreenshot(_T("data\\test02_303_02.bmp"));
 
+    // SH CON
     Emulator_KeyboardSequence("SH CON\r");  // Show RT-11 configuration
     Emulator_Run(25 * 15);
     Test_CheckScreenshot(_T("data\\test02_303_03.bmp"));
 
+    // SH DEV
     Emulator_KeyboardSequence("SH DEV\r");  // Show RT-11 device handlers
     Emulator_Run(25 * 15);
     Test_CheckScreenshot(_T("data\\test02_303_04.bmp"));
 
+    // SH MEM
     Emulator_KeyboardSequence("SH MEM\r");  // Show memory organization
     Emulator_Run(25 * 15);
     Test_CheckScreenshot(_T("data\\test02_303_05.bmp"));
+
+    // Create empty disk, initialize, copy system disk 1-to-1 to the new disk
+    Test_CreateDiskImage(_T("temp\\temp.dsk"));
+    Test_AttachFloppyImage(1, _T("temp\\m5.dsk"));
+    Emulator_KeyboardSequence("DIR MD1:\r");
+    Emulator_Run(25 * 5);
+    Test_CheckScreenshot(_T("data\\test02_303_10.bmp"));  // "Directory I/O error"
+    Emulator_KeyboardSequence("INIT MD1:\r");
+    Emulator_Run(25 * 6);
+    Emulator_KeyboardSequence("Y\r");  // "Are you sure?"
+    Emulator_Run(25 * 10);
+    Test_CheckScreenshot(_T("data\\test02_303_11.bmp"));  // INIT finished
+    Emulator_KeyboardSequence("DIR MD1:\r");
+    //NOTE: Выводит ошибку "File not found SY:DIR.SAV" -- всё плохо
+
+    //Test_SaveScreenshotSeria(_T("video\\test02_%04u.bmp"), 15, 25);
 
     Test_Done();
 }

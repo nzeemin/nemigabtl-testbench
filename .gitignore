@@ -8,3 +8,6 @@
 /emubase
 /temp
 /video/*
+/*.sdf
+/*.opensdf
+/ipch
