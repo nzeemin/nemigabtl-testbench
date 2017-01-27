@@ -384,8 +384,8 @@ void Test_CreateDiskImage(LPCTSTR sFileName)
 {
     LONG fileSize = 235392; // = 80 * 23 * 128 - 128
     HANDLE hFile = ::CreateFile(sFileName,
-		GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-	if (hFile == INVALID_HANDLE_VALUE)
+            GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+    if (hFile == INVALID_HANDLE_VALUE)
     {
         Test_LogFormat('E', _T("FAILED to create disk image %s"), sFileName);
         return;

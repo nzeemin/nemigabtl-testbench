@@ -163,10 +163,19 @@ void Test3_Tests_303()
     Emulator_KeyboardPressRelease('\r');  // Enter on date prompt
     Emulator_Run(25 * 20);
 
+    // DIR
     Emulator_KeyboardSequence("DIR/BR/C:3 MD1:\r");
     Emulator_Run(25 * 5);
     Test_CheckScreenshot(_T("data\\test03_303_dir.bmp"));
 
+    // IOSCAN
+    Emulator_KeyboardSequence("RU MD1:IOSCAN\r");
+    Emulator_Run(25 * 5);
+    Test_CheckScreenshot(_T("data\\test03_303_ioscan.bmp"));
+    //NOTE: На реальной машине IOSCAN показывает другие диапазоны: http://zx-pk.ru/threads/20590-emulyator-nemiga.html?p=891570&viewfull=1#post891570
+    Emulator_Run(25 * 2);
+
+    // TSTVM2
     Emulator_KeyboardSequence("RU MD1:TSTVM2\r");
     Emulator_Run(25 * 22);
     Test_CheckScreenshot(_T("data\\test03_303_tstvm2_1.bmp"));
@@ -180,7 +189,7 @@ void Test3_Tests_303()
     Emulator_Run(25 * 32);
     Test_CheckScreenshot(_T("data\\test03_303_tstvm2_4.bmp"));
 
-    //Test_SaveScreenshotSeria(_T("video\\test03_%04u.bmp"), 30, 25);
+    //Test_SaveScreenshotSeria(_T("video\\test03_%04u.bmp"), 15, 25);
 
     Test_Done();
 }

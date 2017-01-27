@@ -573,12 +573,12 @@ void Emulator_KeyboardPressReleaseChar(char ch, int timeout)
     Emulator_KeyboardPressRelease(ch, timeout); //STUB
 }
 
-void Emulator_KeyboardSequence(const char * str)
+void Emulator_KeyboardSequence(const char * str, int timeout)
 {
     const char * p = str;
     while (*p != 0)
     {
-        Emulator_KeyboardPressReleaseChar(*p, 5);
+        Emulator_KeyboardPressReleaseChar(*p, timeout);
         p++;
         if (*p != 0)
             Emulator_Run(5);  // Pause between keys

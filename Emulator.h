@@ -56,7 +56,7 @@ BOOL Emulator_SaveScreenshot(LPCTSTR sFileName);
 int  Emulator_CheckScreenshot(LPCTSTR sFileName);
 void Emulator_KeyboardPressRelease(BYTE scan, int timeout = 5);
 void Emulator_KeyboardPressReleaseChar(char ch, int timeout = 5);
-void Emulator_KeyboardSequence(const char * str);
+void Emulator_KeyboardSequence(const char * str, int timeout = 5);
 
 BOOL Emulator_SaveImage(LPCTSTR sFilePath);
 BOOL Emulator_LoadImage(LPCTSTR sFilePath);
