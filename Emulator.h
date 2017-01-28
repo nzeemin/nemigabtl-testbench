@@ -52,6 +52,7 @@ void Emulator_PrepareScreenRGB32(void* pImageBits);
 BOOL Emulator_AttachFloppyImage(int slot, LPCTSTR sFilePath);
 
 BOOL Emulator_Run(int frames);
+BOOL Emulator_RunUntilMotorOff();
 BOOL Emulator_SaveScreenshot(LPCTSTR sFileName);
 int  Emulator_CheckScreenshot(LPCTSTR sFileName);
 void Emulator_KeyboardPressRelease(BYTE scan, int timeout = 5);

@@ -364,6 +364,19 @@ BOOL Emulator_Run(int frames)
     return TRUE;
 }
 
+BOOL Emulator_RunUntilMotorOff()
+{
+    for (;;)
+    {
+        int res = Emulator_SystemFrame();
+        if (!res)
+            return FALSE;
+        if (!g_pBoard->IsFloppyEngineOn())
+            break;
+    }
+    return TRUE;
+}
+
 BOOL Emulator_SaveScreenshot(LPCTSTR sFileName, const DWORD * bits)
 {
     ASSERT(bits != NULL);
