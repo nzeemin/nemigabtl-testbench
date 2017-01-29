@@ -340,7 +340,7 @@ void Test5_Games_303()
     Emulator_KeyboardPressRelease('\r');  // Enter on date prompt
     Emulator_Run(25 * 20);
 
-    //// HORACE
+    // HORACE
 
     Emulator_KeyboardSequence("RU MD1:HORACE\r");
     Emulator_Run(25 * 7);
@@ -352,7 +352,106 @@ void Test5_Games_303()
     Emulator_Run(25 * 8);
     Test_CheckScreenshot(_T("data\\test05_303_horace_2.bmp"));
 
-    //Test_SaveScreenshotSeria(_T("video\\test05_%04u.bmp"), 20, 5);
+    // Reboot
+    Emulator_Reset();
+    Emulator_Run(35);  // Boot: 1.4 seconds
+    Emulator_KeyboardPressRelease('D');  // Boot from disk
+    Emulator_Run(25 * 20);
+    Emulator_KeyboardPressRelease('\r');  // Enter on date prompt
+    Emulator_Run(25 * 20);
+
+    // MILMAR
+
+    Emulator_KeyboardSequence("RU MD1:MILMAR\r");
+    Emulator_Run(25 * 7);
+    Emulator_KeyboardPressRelease('\r');  // "РМУ?"
+    Emulator_Run(25 * 4 + 15);
+    Test_CheckScreenshot(_T("data\\test05_303_milmar_1.bmp"));
+    Emulator_KeyboardPressRelease(' ');  // To game
+    Emulator_Run(25);
+    Test_CheckScreenshot(_T("data\\test05_303_milmar_2.bmp"));
+    Emulator_KeyboardPressRelease(' ');  // Start
+    Emulator_Run(25);
+    Emulator_KeyboardSequence("8888", 35);  // Up, Up Up
+    Emulator_Run(25 * 2);
+    Test_CheckScreenshot(_T("data\\test05_303_milmar_3.bmp"));
+    //NOTE: Игра работает нестабильно, после нескольких действий выпадает в Пульт
+
+    // Reboot
+    Emulator_Reset();
+    Emulator_Run(35);  // Boot: 1.4 seconds
+    Emulator_KeyboardPressRelease('D');  // Boot from disk
+    Emulator_Run(25 * 20);
+    Emulator_KeyboardPressRelease('\r');  // Enter on date prompt
+    Emulator_Run(25 * 20);
+
+    // MAIN -- Lode Runner ported from BK -- see nemiga-loderunner project
+
+    Emulator_KeyboardSequence("RU MD1:MAIN\r");
+    Emulator_Run(25 * 7);
+    Test_CheckScreenshot(_T("data\\test05_303_main_1.bmp"));
+    Emulator_KeyboardPressRelease('\r');  // Game
+    Emulator_Run(25 * 2);
+    Test_CheckScreenshot(_T("data\\test05_303_main_2.bmp"));
+    Emulator_KeyboardPressRelease('\r');  // Start
+    Emulator_Run(25 * 3);
+    Test_CheckScreenshot(_T("data\\test05_303_main_3.bmp"));
+
+    //Test_SaveScreenshotSeria(_T("video\\test05_%04u.bmp"), 100, 1);
+
+    Test_Done();
+}
+
+void Test6_DiskM5_303()  // Experiments with RT-11 boot under 3.03
+{
+    Test_Init(_T("TEST 6: Disk M5.dsk, ROM 3.03"), EMU_CONF_NEMIGA405);
+
+    Test_CopyFile(_T("data\\m5.dsk"), _T("temp\\m5.dsk"));
+    Test_AttachFloppyImage(0, _T("temp\\m5.dsk"));
+
+    // Boot to RT-11
+    Emulator_Run(35);  // Boot: 1.4 seconds
+    Emulator_KeyboardPressRelease('D');  // Boot from disk
+
+    //g_pBoard->SetTrace(TRACE_FLOPPY);// | TRACE_CPURAM);
+    g_pBoard->SetTrace(TRACE_FLOPPY);
+    Emulator_SetCPUBreakpoint(002064);
+    Emulator_Run(25 * 10);  // Run to breakpoint
+    Emulator_SetCPUBreakpoint(0177777);
+    //Emulator_Run(86);
+    g_pBoard->SetTrace(TRACE_FLOPPY | TRACE_CPURAM);
+    //Emulator_RunUntilMotorOff();
+    //Emulator_Run(3);
+    Test_SaveStateImage(_T("303_002064.nmst"));
+    //Test_SaveScreenshotSeria(_T("video\\test06_%04u.bmp"), 15, 25);
+    Test_SaveScreenshot(_T("test06_303_1.bmp"));
+
+    Test_Done();
+}
+
+void Test6_Disk02A_405()  // Experiments with RT-11 boot under 4.05
+{
+    Test_Init(_T("TEST 6: Disk 02A.dsk, ROM 4.05"), EMU_CONF_NEMIGA405);
+
+    Test_CopyFile(_T("data\\02a.dsk"), _T("temp\\02a.dsk"));
+    Test_AttachFloppyImage(0, _T("temp\\02a.dsk"));
+
+    // Boot to RT-11
+    Emulator_Run(35);  // Boot: 1.4 seconds
+    Emulator_KeyboardPressRelease('D');  // Boot from disk
+    //Emulator_Run(25 * 20);
+
+    g_pBoard->SetTrace(TRACE_FLOPPY);// | TRACE_CPURAM);
+    //Emulator_SetCPUBreakpoint(0146414);
+    //Emulator_Run(25 * 200);  // Run to breakpoint
+    //Emulator_SetCPUBreakpoint(0177777);
+    //DebugLogFormat(_T("(177564)=%06o\r\n"), g_pBoard->GetRAMWord(0177564));
+    //g_pBoard->SetTrace(TRACE_FLOPPY | TRACE_CPURAM);
+    //Emulator_Run(1);
+    //Test_SaveStateImage(_T("405_002044.nmst"));
+    Emulator_RunUntilMotorOff();
+    //Test_SaveScreenshotSeria(_T("video\\test06_%04u.bmp"), 15, 25);
+    Test_SaveScreenshot(_T("test06_405_1.bmp"));
 
     Test_Done();
 }
@@ -370,6 +469,9 @@ int _tmain(int /*argc*/, _TCHAR* /*argv*/[])
     Test3_Tests_303();
     Test4_Basic_303();
     Test5_Games_303();
+
+    //Test6_DiskM5_303();
+    //Test6_Disk02A_405();
 
     Test_LogInfo(_T("Finalization..."));
 
