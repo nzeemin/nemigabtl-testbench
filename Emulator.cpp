@@ -64,6 +64,14 @@ const DWORD ScreenView_Palette[4] =
 {
     0x000000, 0xB0B0B0, 0x404040, 0xFFFFFF
 };
+const DWORD Emulator_DiffPalette[16] =
+{
+    0x000000, 0xB0B0B0, 0x404040, 0xFFFFFF,
+    0x00403F, 0x00B03F, 0x00FF3F,
+    0x40003F, 0x40B03F, 0x40FF3F,
+    0xB0003F, 0xB0403F, 0xB0FF3F,
+    0xFF003F, 0xFF403F, 0xFFB03F
+};
 
 
 //////////////////////////////////////////////////////////////////////
@@ -377,7 +385,7 @@ BOOL Emulator_RunUntilMotorOff()
     return TRUE;
 }
 
-BOOL Emulator_SaveScreenshot(LPCTSTR sFileName, const DWORD * bits)
+BOOL Emulator_SaveScreenshot(LPCTSTR sFileName, const DWORD * bits, const DWORD * palette)
 {
     ASSERT(bits != NULL);
     ASSERT(sFileName != NULL);
@@ -412,7 +420,6 @@ BOOL Emulator_SaveScreenshot(LPCTSTR sFileName, const DWORD * bits)
     // Prepare the image data
     const DWORD * psrc = bits;
     BYTE * pdst = pData;
-    const DWORD * palette = Emulator_GetPalette();
     for (int i = 0; i < 512 * 312; i++)
     {
         DWORD rgb = *psrc;
@@ -473,7 +480,7 @@ BOOL Emulator_SaveScreenshot(LPCTSTR sFileName)
 
     Emulator_PrepareScreenRGB32(bits);
 
-    BOOL result = Emulator_SaveScreenshot(sFileName, bits);
+    BOOL result = Emulator_SaveScreenshot(sFileName, bits, Emulator_GetPalette());
 
     ::free(bits);
 
@@ -558,6 +565,21 @@ int Emulator_CheckScreenshot(LPCTSTR sFileName, const DWORD * bits, const DWORD 
     return result;
 }
 
+void Emulator_PrepareDiffScreenshot(const DWORD * scr1, const DWORD * scr2, DWORD * dest)
+{
+    const DWORD * p1 = scr1;
+    const DWORD * p2 = scr2;
+    DWORD * pdest = dest;
+    for (int i = 512 * 312; i > 0; i--)
+    {
+        if (*p1 == *p2)
+            *pdest = *p1;
+        else
+            *pdest = 0x00003f | (*p1 & 0x00ff00) | (*p2 & 0xff0000);
+        p1++;  p2++;  pdest++;
+    }
+}
+
 int Emulator_CheckScreenshot(LPCTSTR sFileName)
 {
     DWORD * bits = (DWORD *) ::malloc(512 * 312 * 4);
@@ -567,6 +589,21 @@ int Emulator_CheckScreenshot(LPCTSTR sFileName)
 
     const DWORD * palette = Emulator_GetPalette();
     int result = Emulator_CheckScreenshot(sFileName, bits, palette, tempbits);
+    if (result != 0)
+    {
+        DWORD * diffbits = (DWORD *) ::malloc(512 * 312 * 4);
+        Emulator_PrepareDiffScreenshot(bits, tempbits, diffbits);
+        
+        // Make diff fike name like "diff" + file name without a path from sFileName
+        TCHAR sDiffFileName[MAX_PATH];
+        const TCHAR * sSubFileName = _tcsrchr(sFileName, _T('\\'));
+        sSubFileName = (sSubFileName == NULL) ? sFileName : sSubFileName + 1;
+        wsprintf(sDiffFileName, _T("diff_%s"), sSubFileName);
+
+        Emulator_SaveScreenshot(sDiffFileName, diffbits, Emulator_DiffPalette);
+
+        ::free(diffbits);
+    }
 
     ::free(tempbits);
     ::free(bits);
