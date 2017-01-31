@@ -288,21 +288,25 @@ void Test4_Basic_303()
     Test_CheckScreenshot(_T("data\\test04_303_02.bmp"));
     // Результаты теста совпадают с реалом: http://zx-pk.ru/threads/20590-emulyator-nemiga.html?p=892828&viewfull=1#post892828
 
-    //Emulator_KeyboardSequence("PRINT PI\r");
-    //Emulator_Run(25 * 2);
+    Emulator_KeyboardSequence("NEW\r");  // Clear current program, reset BASIC
+    Emulator_Run(25 * 5);
+    Emulator_KeyboardSequence("PRINT PI\r");
+    Emulator_Run(25 * 2);
+    Test_CheckScreenshot(_T("data\\test04_303_03.bmp"));
+
     //Emulator_KeyboardSequence("10 FOR I=32 TO 255\r");
     //Emulator_KeyboardSequence("20 PRINT CHR$(I);\r");
     //Emulator_KeyboardSequence("30 IF I MOD 16 = 15 THEN PRINT\r");
     //Emulator_KeyboardSequence("50 NEXT I\r");
     //Emulator_Run(25 * 2);
     //Emulator_KeyboardSequence("LIST\r");
-    //NOTE: В листинге строка 30 выглядит как 330 -- WTF??
-    //Emulator_Run(25 * 2);
-    //g_pBoard->SetTrace(TRACE_KEYBOARD);
+    ////NOTE: В листинге строка 30 выглядит как 330 -- WTF??
+    //Emulator_Run(25 * 5);
+    ////g_pBoard->SetTrace(TRACE_KEYBOARD);
     //Emulator_KeyboardSequence("RUN\r");
-    //NOTE: После запуска программа завершается и снова печатается "run", и так по кругу
+    ////NOTE: После запуска программа завершается и снова печатается "run", и так по кругу
 
-    //Test_SaveScreenshotSeria(_T("video\\test04_%04u.bmp"), 15, 25);
+    //Test_SaveScreenshotSeria(_T("video\\test04_%04u.bmp"), 20, 25);
     //Emulator_SaveImage(_T("test04.nmst"));
 
     Test_Done();
