@@ -128,20 +128,70 @@ void Test2_DiskM5_303()
     Emulator_KeyboardSequence("SH MEM\r");  // Show memory organization
     Emulator_Run(25 * 15);
     Test_CheckScreenshot(_T("data\\test02_303_05.bmp"));
+}
 
-    // Create empty disk, initialize, copy system disk 1-to-1 to the new disk
+void Test2_DiskM5_303_CopyDisk()
+{
+    Test_Init(_T("TEST 2: Disk M5, ROM 3.03 -- Copy Disk"), EMU_CONF_NEMIGA303);
+
+    Test_CopyFile(_T("data\\m5.dsk"), _T("temp\\m5.dsk"));
+    Test_AttachFloppyImage(0, _T("temp\\m5.dsk"));
     Test_CreateDiskImage(_T("temp\\temp.dsk"));
-    Test_AttachFloppyImage(1, _T("temp\\m5.dsk"));
+    Test_AttachFloppyImage(1, _T("temp\\temp.dsk"));
+
+    // Boot to RT-11
+    Emulator_Run(35);  // Boot: 1.4 seconds
+    Emulator_KeyboardPressRelease('D');  // Boot from disk
+    Emulator_Run(25 * 20);
+    Emulator_KeyboardPressRelease('\r');  // Enter on date prompt
+    Emulator_RunUntilMotorOff();
+
     Emulator_KeyboardSequence("DIR MD1:\r");
     Emulator_Run(25 * 5);
     Test_CheckScreenshot(_T("data\\test02_303_10.bmp"));  // "Directory I/O error"
+
+    // Initialize the empty disk
     Emulator_KeyboardSequence("INIT MD1:\r");
     Emulator_Run(25 * 6);
     Emulator_KeyboardSequence("Y\r");  // "Are you sure?"
-    Emulator_Run(25 * 10);
+    Emulator_RunUntilMotorOff();
     Test_CheckScreenshot(_T("data\\test02_303_11.bmp"));  // INIT finished
     Emulator_KeyboardSequence("DIR MD1:\r");
-    //NOTE: Выводит ошибку "File not found SY:DIR.SAV" -- всё плохо
+    Emulator_RunUntilMotorOff();
+    Test_CheckScreenshot(_T("data\\test02_303_12.bmp"));
+    Emulator_Run(25 * 4);
+
+    // Copy one file
+    Emulator_KeyboardSequence("COPY MD0:PIP.SAV MD1:\r");
+    Emulator_Run(25);
+    Emulator_RunUntilMotorOff();
+    Emulator_KeyboardSequence("DIR/BR/C:3 MD1:\r");
+    Emulator_Run(25 * 5);
+    Test_CheckScreenshot(_T("data\\test02_303_13.bmp"));
+    Emulator_Run(25 * 4);
+
+    // Copy the whole disk sector-by-sector
+    Emulator_KeyboardSequence("COPY /DEVICE MD0: MD1:\r");
+    Emulator_Run(25 * 4);
+    Emulator_KeyboardSequence("Y\r");  // Are you sure?
+    Emulator_Run(25);
+    Emulator_RunUntilMotorOff();
+    Emulator_KeyboardSequence("DIR/BR/C:3 MD1:\r");
+    Emulator_Run(25 * 5);
+    Test_CheckScreenshot(_T("data\\test02_303_14.bmp"));
+    Emulator_Run(25 * 2);
+
+    // Now let's boot from the new disk
+    Emulator_KeyboardSequence("SET SG OFF\r");  // Restore default charset as suggested by SG driver
+    Emulator_Run(25 * 5);
+    Emulator_KeyboardSequence("BOOT MD1:\r");
+    Emulator_Run(25);
+    Emulator_RunUntilMotorOff();
+    Test_CheckScreenshot(_T("data\\test02_303_15.bmp"));
+    Emulator_KeyboardPressReleaseChar('\r');
+    Emulator_Run(25);
+    Emulator_RunUntilMotorOff();
+    Test_CheckScreenshot(_T("data\\test02_303_16.bmp"));
 
     //Test_SaveScreenshotSeria(_T("video\\test02_%04u.bmp"), 15, 25);
 
@@ -505,6 +555,7 @@ int _tmain(int /*argc*/, _TCHAR* /*argv*/[])
     Test1_SystemMonitor_405();
     Test1_SystemMonitor_406();
     Test2_DiskM5_303();
+    Test2_DiskM5_303_CopyDisk();
     Test3_Tests_303();
     Test4_Basic_303();
     Test5_Games_303();

@@ -50,6 +50,7 @@ DWORD Emulator_GetUptime();  // NEMIGA uptime, in seconds
 void Emulator_PrepareScreenRGB32(void* pImageBits);
 
 BOOL Emulator_AttachFloppyImage(int slot, LPCTSTR sFilePath);
+void Emulator_DetachFloppyImage(int slot);
 
 BOOL Emulator_Run(int frames);
 BOOL Emulator_RunUntilMotorOff();

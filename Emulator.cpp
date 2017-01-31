@@ -359,6 +359,10 @@ BOOL Emulator_AttachFloppyImage(int slot, LPCTSTR sFilePath)
 {
     return g_pBoard->AttachFloppyImage(slot, sFilePath);
 }
+void Emulator_DetachFloppyImage(int slot)
+{
+    return g_pBoard->DetachFloppyImage(slot);
+}
 
 BOOL Emulator_Run(int frames)
 {
