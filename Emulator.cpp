@@ -593,7 +593,7 @@ int Emulator_CheckScreenshot(LPCTSTR sFileName)
     {
         DWORD * diffbits = (DWORD *) ::malloc(512 * 312 * 4);
         Emulator_PrepareDiffScreenshot(bits, tempbits, diffbits);
-        
+
         // Make diff fike name like "diff" + file name without a path from sFileName
         TCHAR sDiffFileName[MAX_PATH];
         const TCHAR * sSubFileName = _tcsrchr(sFileName, _T('\\'));

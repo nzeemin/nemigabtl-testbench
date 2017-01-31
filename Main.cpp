@@ -404,27 +404,24 @@ void Test5_Games_303()
 
 void Test6_DiskM5_303()  // Experiments with RT-11 boot under 3.03
 {
-    Test_Init(_T("TEST 6: Disk M5.dsk, ROM 3.03"), EMU_CONF_NEMIGA405);
+    Test_Init(_T("TEST 6: Disk M5.dsk, ROM 3.03"), EMU_CONF_NEMIGA303);
 
     Test_CopyFile(_T("data\\m5.dsk"), _T("temp\\m5.dsk"));
     Test_AttachFloppyImage(0, _T("temp\\m5.dsk"));
 
-    // Boot to RT-11
     Emulator_Run(35);  // Boot: 1.4 seconds
     Emulator_KeyboardPressRelease('D');  // Boot from disk
-
-    //g_pBoard->SetTrace(TRACE_FLOPPY);// | TRACE_CPURAM);
-    g_pBoard->SetTrace(TRACE_FLOPPY);
-    Emulator_SetCPUBreakpoint(002064);
-    Emulator_Run(25 * 10);  // Run to breakpoint
-    Emulator_SetCPUBreakpoint(0177777);
-    //Emulator_Run(86);
-    g_pBoard->SetTrace(TRACE_FLOPPY | TRACE_CPURAM);
-    //Emulator_RunUntilMotorOff();
-    //Emulator_Run(3);
-    Test_SaveStateImage(_T("303_002064.nmst"));
-    //Test_SaveScreenshotSeria(_T("video\\test06_%04u.bmp"), 15, 25);
-    Test_SaveScreenshot(_T("test06_303_1.bmp"));
+    Emulator_Run(25);
+    Emulator_RunUntilMotorOff();
+    Emulator_KeyboardPressRelease('\r');  // Enter on date prompt
+    Emulator_Run(25);
+    Emulator_RunUntilMotorOff();
+    Emulator_KeyboardSequence("SH CON\r");  // Show RT-11 configuration
+    //Emulator_Run(17);
+    //g_pBoard->SetTrace(TRACE_FLOPPY /*| TRACE_CPURAM*/);
+    Emulator_Run(25 * 10);
+    //Test_SaveScreenshotSeria(_T("video\\test06_%04u.bmp"), 25, 1);
+    Test_SaveScreenshot(_T("test06_303_m5_1.bmp"));
 
     Test_Done();
 }
@@ -436,7 +433,6 @@ void Test6_Disk02A_405()  // Experiments with RT-11 boot under 4.05
     Test_CopyFile(_T("data\\02a.dsk"), _T("temp\\02a.dsk"));
     Test_AttachFloppyImage(0, _T("temp\\02a.dsk"));
 
-    // Boot to RT-11
     Emulator_Run(35);  // Boot: 1.4 seconds
     Emulator_KeyboardPressRelease('D');  // Boot from disk
     //Emulator_Run(25 * 20);
@@ -452,6 +448,49 @@ void Test6_Disk02A_405()  // Experiments with RT-11 boot under 4.05
     Emulator_RunUntilMotorOff();
     //Test_SaveScreenshotSeria(_T("video\\test06_%04u.bmp"), 15, 25);
     Test_SaveScreenshot(_T("test06_405_1.bmp"));
+
+    Test_Done();
+}
+
+void Test6_DiskM540x_405()  // Experiments with RT-11 boot under 4.05
+{
+    Test_Init(_T("TEST 6: Disk M5.dsk, ROM 4.05"), EMU_CONF_NEMIGA405);
+
+    Test_CopyFile(_T("data\\m5-40x.dsk"), _T("temp\\m5-40x.dsk"));
+    Test_AttachFloppyImage(0, _T("temp\\m5-40x.dsk"));
+
+    Emulator_Run(35);  // Boot: 1.4 seconds
+    Emulator_KeyboardPressRelease('D');  // Boot from disk
+    Emulator_RunUntilMotorOff();
+    //Test_SaveScreenshotSeria(_T("video\\test06_%04u.bmp"), 15, 25);
+    Test_SaveScreenshot(_T("test06_405_m540x_1.bmp"));
+
+    Test_Done();
+}
+
+void Test6_DiskM540x_406()  // Experiments with RT-11 boot under 4.06
+{
+    Test_Init(_T("TEST 6: Disk M5-40x.dsk, ROM 4.06"), EMU_CONF_NEMIGA406);
+
+    Test_CopyFile(_T("data\\m5-40x.dsk"), _T("temp\\m5-40x.dsk"));
+    Test_AttachFloppyImage(0, _T("temp\\m5-40x.dsk"));
+
+    Emulator_Run(35);  // Boot: 1.4 seconds
+    Emulator_KeyboardPressRelease('D');  // Boot from disk
+    Emulator_Run(25 * 16 + 4);
+    Emulator_RunUntilMotorOff();
+    //Test_SaveScreenshotSeria(_T("video\\test06_%04u.bmp"), 15, 25);
+    Test_SaveScreenshot(_T("test06_406_m540x_01.bmp"));
+
+    // DIR
+    Emulator_KeyboardSequence("DIR/BR/C:3\r");
+    Emulator_Run(25 * 5);
+    Test_SaveScreenshot(_T("test06_406_m540x_02.bmp"));
+
+    // SH CON
+    Emulator_KeyboardSequence("SH CON\r");  // Show RT-11 configuration
+    Emulator_Run(25 * 15);
+    Test_SaveScreenshot(_T("test02_406_m540x_03.bmp"));
 
     Test_Done();
 }
@@ -472,6 +511,8 @@ int _tmain(int /*argc*/, _TCHAR* /*argv*/[])
 
     //Test6_DiskM5_303();
     //Test6_Disk02A_405();
+    //Test6_DiskM540x_405();
+    //Test6_DiskM540x_406();
 
     Test_LogInfo(_T("Finalization..."));
 
