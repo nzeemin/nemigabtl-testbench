@@ -549,6 +549,74 @@ void Test6_DiskM540x_406()  // Experiments with RT-11 boot under 4.06
     Test_Done();
 }
 
+void TestX_BootHX()
+{
+    Test_Init(_T("TEST X: Boot HX"), EMU_CONF_NEMIGA303);
+
+    Emulator_Run(35);  // Wake up: 1.4 seconds
+    Emulator_KeyboardSequence("100/");
+    Emulator_KeyboardSequence("102\n");
+    Emulator_KeyboardSequence("2\r");
+    Emulator_Run(25 * 2);
+    Emulator_KeyboardSequence("10000/");
+    Emulator_KeyboardSequence("12701\n");
+    Emulator_KeyboardSequence("176500\n");
+    Emulator_KeyboardSequence("12702\n");
+    Emulator_KeyboardSequence("176504\n");
+    Emulator_KeyboardSequence("10100\n");
+    Emulator_KeyboardSequence("5003\n");
+    Emulator_KeyboardSequence("77301\n");
+    Emulator_KeyboardSequence("5212\n");
+    Emulator_KeyboardSequence("105712\n");
+    Emulator_KeyboardSequence("100376\n");
+    Emulator_KeyboardSequence("6300\n");
+    Emulator_KeyboardSequence("1005\n");
+    Emulator_KeyboardSequence("5012\n");
+    Emulator_KeyboardSequence("12700\n");
+    Test_SaveScreenshot(_T("test0X_303_01.bmp"));
+    Emulator_KeyboardSequence("4\n");
+    Emulator_Run(25 * 2);
+    Emulator_KeyboardSequence("5761\n");
+    Emulator_Run(25 * 2);
+    Emulator_KeyboardSequence("2\n");
+    Emulator_Run(25 * 2);
+    Emulator_KeyboardSequence("42700\n");
+    Emulator_Run(25 * 2);
+    Emulator_KeyboardSequence("20\n");
+    Emulator_Run(25 * 2);
+    Emulator_KeyboardSequence("10062\n");
+    Emulator_Run(25 * 2);
+    Emulator_KeyboardSequence("2\n");
+    Emulator_Run(25 * 2);
+    Emulator_KeyboardSequence("1362\n");
+    Emulator_Run(25 * 2);
+    Emulator_KeyboardSequence("105711\n");
+    Emulator_Run(25 * 2);
+    Emulator_KeyboardSequence("100376\n");
+    Emulator_Run(25 * 2);
+    Emulator_KeyboardSequence("116123\n");
+    Emulator_Run(25 * 2);
+    Emulator_KeyboardSequence("2\n");
+    Emulator_Run(25 * 2);
+    Emulator_KeyboardSequence("22703\n");
+    Emulator_Run(25 * 2);
+    Emulator_KeyboardSequence("1000\n");
+    Emulator_Run(25 * 2);
+    Emulator_KeyboardSequence("101371\n");
+    Emulator_Run(25 * 2);
+    Emulator_KeyboardSequence("5007\r");
+    Emulator_Run(25 * 2);
+    Emulator_KeyboardSequence("10000");  // Preparing to press G
+    Emulator_Run(25 * 2);
+    Emulator_SetCPUBreakpoint(010000);
+    Emulator_KeyboardPressRelease('G');
+    Emulator_Run(25 * 100); // Waiting for breakpoint
+    Test_SaveScreenshot(_T("test0X_303_02.bmp"));
+    Test_SaveStateImage(_T("303_boothx.nmst"));
+
+    Test_Done();
+}
+
 int _tmain(int /*argc*/, _TCHAR* /*argv*/[])
 {
     SYSTEMTIME timeFrom;  ::GetLocalTime(&timeFrom);
@@ -568,6 +636,7 @@ int _tmain(int /*argc*/, _TCHAR* /*argv*/[])
     //Test6_Disk02A_405();
     //Test6_DiskM540x_405();
     //Test6_DiskM540x_406();
+    //TestX_BootHX();
 
     Test_LogInfo(_T("Finalization..."));
 
