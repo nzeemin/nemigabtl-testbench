@@ -517,7 +517,17 @@ void Test6_DiskM540x_405()  // Experiments with RT-11 boot under 4.05
     Emulator_KeyboardPressRelease('D');  // Boot from disk
     Emulator_RunUntilMotorOff();
     //Test_SaveScreenshotSeria(_T("video\\test06_%04u.bmp"), 15, 25);
-    Test_SaveScreenshot(_T("test06_405_m540x_1.bmp"));
+    Test_CheckScreenshot(_T("data\\test06_405_m540x_01.bmp"));
+
+    // DIR
+    Emulator_KeyboardSequence("DIR/BR/C:3\r");
+    Emulator_Run(25 * 5);
+    Test_CheckScreenshot(_T("data\\test06_405_m540x_02.bmp"));
+
+    // SH CON
+    Emulator_KeyboardSequence("SH CON\r");  // Show RT-11 configuration
+    Emulator_Run(25 * 15);
+    Test_CheckScreenshot(_T("data\\test06_405_m540x_03.bmp"));
 
     Test_Done();
 }
@@ -534,17 +544,17 @@ void Test6_DiskM540x_406()  // Experiments with RT-11 boot under 4.06
     Emulator_Run(25 * 16 + 4);
     Emulator_RunUntilMotorOff();
     //Test_SaveScreenshotSeria(_T("video\\test06_%04u.bmp"), 15, 25);
-    Test_SaveScreenshot(_T("test06_406_m540x_01.bmp"));
+    Test_CheckScreenshot(_T("data\\test06_406_m540x_01.bmp"));
 
     // DIR
     Emulator_KeyboardSequence("DIR/BR/C:3\r");
     Emulator_Run(25 * 5);
-    Test_SaveScreenshot(_T("test06_406_m540x_02.bmp"));
+    Test_CheckScreenshot(_T("data\\test06_406_m540x_02.bmp"));
 
     // SH CON
     Emulator_KeyboardSequence("SH CON\r");  // Show RT-11 configuration
     Emulator_Run(25 * 15);
-    Test_SaveScreenshot(_T("test02_406_m540x_03.bmp"));
+    Test_CheckScreenshot(_T("data\\test06_406_m540x_03.bmp"));
 
     Test_Done();
 }
@@ -631,11 +641,11 @@ int _tmain(int /*argc*/, _TCHAR* /*argv*/[])
     Test3_Tests_303();
     Test4_Basic_303();
     Test5_Games_303();
+    Test6_DiskM540x_405();
+    Test6_DiskM540x_406();
 
     //Test6_DiskM5_303();
     //Test6_Disk02A_405();
-    //Test6_DiskM540x_405();
-    //Test6_DiskM540x_406();
     //TestX_BootHX();
 
     Test_LogInfo(_T("Finalization..."));
