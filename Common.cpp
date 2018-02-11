@@ -22,20 +22,20 @@ int m_nCommon_TestsFailed = 0;
 
 BOOL AssertFailedLine(LPCSTR lpszFileName, int nLine)
 {
-    //TODO: Implement in this environment
+    DebugPrintFormat(_T("ASSERT in %s at line %n"), lpszFileName, nLine);
 
     return FALSE;
 }
 
 void AlertWarning(LPCTSTR sMessage)
 {
-    //TODO: Implement in this environment
+    Test_Log('*', sMessage);
 }
-void AlertWarningFormat(LPCTSTR sFormat, ...)
+void AlertWarningFormat(LPCTSTR /*sFormat*/, ...)
 {
     //TODO: Implement in this environment
 }
-BOOL AlertOkCancel(LPCTSTR sMessage)
+BOOL AlertOkCancel(LPCTSTR /*sMessage*/)
 {
     //TODO: Implement in this environment
     return FALSE;
@@ -283,7 +283,7 @@ void Test_LogFormat(char eventtype, LPCTSTR format, ...)
     Test_Log(eventtype, buffer);
 }
 
-void Test_Init(LPCTSTR sTestTitle, int configuration)
+void Test_Init(LPCTSTR sTestTitle, WORD configuration)
 {
     Test_Log('!', sTestTitle);
 
@@ -297,7 +297,7 @@ void Test_Init(LPCTSTR sTestTitle, int configuration)
         Test_Log('E', _T("FAILED to initialize the emulator configuration."));
 }
 
-void Test_ChangeConfiguration(int configuration)
+void Test_ChangeConfiguration(WORD configuration)
 {
     if (!Emulator_Init())
         Test_Log('E', _T("FAILED to initialize the emulator."));

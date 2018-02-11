@@ -37,7 +37,7 @@ extern BOOL g_okEmulatorRunning;
 
 
 BOOL Emulator_Init();
-BOOL Emulator_InitConfiguration(int configuration);
+BOOL Emulator_InitConfiguration(WORD configuration);
 void Emulator_Done();
 void Emulator_SetCPUBreakpoint(WORD address);
 BOOL Emulator_IsBreakpoint();

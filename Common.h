@@ -87,8 +87,8 @@ void Test_LogFormat(char eventtype, LPCTSTR format, ...);
 inline void Test_LogInfo(LPCTSTR message) { Test_Log('i', message); }
 inline void Test_LogError(LPCTSTR message) { Test_Log('E', message); }
 
-void Test_Init(LPCTSTR sTestTitle, int configuration);
-void Test_ChangeConfiguration(int configuration);
+void Test_Init(LPCTSTR sTestTitle, WORD configuration);
+void Test_ChangeConfiguration(WORD configuration);
 void Test_Done();
 void Test_LogSummary();
 

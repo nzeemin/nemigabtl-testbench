@@ -156,7 +156,7 @@ void Emulator_Done()
     ::free(g_pEmulatorChangedRam);
 }
 
-BOOL Emulator_InitConfiguration(int configuration)
+BOOL Emulator_InitConfiguration(WORD configuration)
 {
     g_pBoard->SetConfiguration(configuration);
 
