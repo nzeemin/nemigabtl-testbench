@@ -84,9 +84,29 @@ void Test1_SystemMonitor_406()
     Emulator_Run(5);
     Emulator_KeyboardPressRelease('/');  // Open address 000000
     Emulator_Run(5);
+    Emulator_KeyboardPressRelease('\n');  // Next address
+    Emulator_Run(5);
+    Emulator_KeyboardPressRelease('\r');  // Close
+    Emulator_Run(5);
+    Emulator_KeyboardSequence("160000/");  // Open address 160000
+    Emulator_Run(5);
+    Emulator_KeyboardSequence("170000/");  // Open address 170000
+    Emulator_Run(5);
+    Emulator_KeyboardPressRelease('\n');  // Next address 170002
+    Emulator_Run(5);
+    Emulator_KeyboardPressRelease('\n');  // Next address 170004
+    Emulator_Run(5);
+    Emulator_KeyboardPressRelease('\n');  // Next address 170006
+    Emulator_Run(5);
+    Emulator_KeyboardPressRelease('\n');  // Next address 170010
+    Emulator_Run(5);
+    Emulator_KeyboardPressRelease('\n');  // Next address 170012
+    Emulator_Run(5);
+    Emulator_KeyboardPressRelease('\n');  // Next address 170014
+    Emulator_Run(5);
+    Emulator_KeyboardPressRelease('\n');  // Next address 170016, unavailable
+    Emulator_Run(10);
     Test_CheckScreenshot(_T("data\\test01_406_02.bmp"));
-    //NOTE: В прошивке 4.06 команда пульта '/' (работа с памятью) работает как-то странно --
-    //      не позволяет работать с адресами выше адреса, лежащего в 177744, а по умолчанию там лежит 0.
 
     //Test_SaveScreenshotSeria(_T("video\\test01_%04u.bmp"), 50, 5);
     //g_pBoard->SetTrace(TRACE_CPU);
@@ -644,6 +664,7 @@ int _tmain(int /*argc*/, _TCHAR* /*argv*/[])
     Test6_DiskM540x_405();
     Test6_DiskM540x_406();
 
+    //Test5_Games_406();
     //Test6_DiskM5_303();
     //Test6_Disk02A_405();
     //TestX_BootHX();
